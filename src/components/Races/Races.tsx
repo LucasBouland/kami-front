@@ -46,31 +46,28 @@ export function Races() {
     ];
 
     const getTypes = (race: any) => {
-        const types: any = [];
         let r = ({
-            id: null,
+            id: race.id,
+            key: race.id,
             name: race.name,
             racial_bonus: race.racial_bonus,
-            type: null,
-            strength: null,
-            agility: null,
-            intellect: null,
-            will: null,
-            luck: null
+            type: '',
+            strength: '',
+            agility: '',
+            intellect: '',
+            will: '',
+            luck: ''
         });
         // each race has 3 attributes style
         race.attributes.forEach((elt: any) => {
-            const n = {...r};
-            n.id = elt.id;
-            n.type = elt.type;
-            n.strength = elt.strength;
-            n.agility = elt.agility;
-            n.intellect = elt.intellect;
-            n.will = elt.will;
-            n.luck = elt.luck;
-            types.push(n);
+            r.type += elt.type + '\n';
+            r.strength += elt.strength + '\n';
+            r.agility += elt.agility + '\n';
+            r.intellect += elt.intellect + '\n';
+            r.will += elt.will + '\n';
+            r.luck += elt.luck + '\n';
         });
-        return types;
+        return r;
     }
     useEffect( () => {
         axios.get('http://kamibackend/race/')
@@ -78,7 +75,7 @@ export function Races() {
             console.log(res);
             let racesExploded : any = [];
             res.data.forEach( (elt:any) => {
-                racesExploded = racesExploded.concat(getTypes(elt));
+                racesExploded.push(getTypes(elt));
             });
             console.log("expl",racesExploded);
             /*const listRaces = res.data.map( (race: any) => 
@@ -92,6 +89,6 @@ export function Races() {
     }, [])
 
     return (
-           <Table columns={columns} dataSource={races} pagination={false}/> 
+           <Table style={{ whiteSpace: 'pre'}} columns={columns} dataSource={races} pagination={false}/> 
     );
 }
